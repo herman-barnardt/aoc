@@ -3,7 +3,8 @@ package util
 import "math"
 
 type Point struct {
-	x, y int
+	X int
+	Y int
 }
 
 func IntAbs(a, b int) int {
