@@ -153,6 +153,8 @@ func solve(year, day int) error {
 }
 
 func download(year, day int) error {
+	makeDir("./data")
+
 	path := fmt.Sprintf("./data/%d/day%d", year, day)
 	_, err := os.Open(path)
 	if errors.Is(err, os.ErrNotExist) {
