@@ -7,6 +7,6 @@ type Point struct {
 	Y int
 }
 
-func IntAbs(a, b int) int {
-	return int(math.Abs(float64(a - b)))
+func IntAbs(a int) int {
+	return int(math.Abs(float64(a)))
 }
