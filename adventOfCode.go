@@ -198,7 +198,7 @@ var solutionTemplate = `package main
 import (
 	"errors"
 
-	aoc "github.com/herman-barnardt/aoc/util"
+	aoc "github.com/herman-barnardt/aoc"
 )
 func init() {
 	aoc.Register(
