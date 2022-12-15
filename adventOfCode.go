@@ -22,6 +22,7 @@ type solution struct {
 var allSolutions = make(map[int]map[int]solution)
 
 var filenameIncludesYear = false
+var fileExtension = ".go"
 
 func Register(year int, dayNumber int, a, b func([]string) interface{}) {
 	if _, ok := allSolutions[year]; !ok {
@@ -35,6 +36,14 @@ func Register(year int, dayNumber int, a, b func([]string) interface{}) {
 
 func SetFilenameIncludesYear(b bool) {
 	filenameIncludesYear = b
+}
+
+func SetFileExtension(s string) {
+	fileExtension = s
+}
+
+func SetSolutionTemplate(s string) {
+	solutionTemplate = s
 }
 
 func Run(cmd string, year int, day int) error {
@@ -185,7 +194,7 @@ func create(year, day int) error {
 		return fmt.Errorf("file=%s already exists (%v)", filename, err)
 	}
 
-	filePath += ".go"
+	filePath += fileExtension
 
 	templateString := solutionTemplate
 
