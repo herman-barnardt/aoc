@@ -53,7 +53,9 @@ func Run(cmd string, year int, day int, part int) error {
 	case "download":
 		return download(year, day)
 	case "solve":
-		return solve(year, day, part)
+		return solve(fmt.Sprintf("./data/%d/day%d", year, day), year, day, part)
+	case "test":
+		return solve(fmt.Sprintf("./data/%d/day%dTest", year, day), year, day, part)
 	default:
 		return errors.New(fmt.Sprintf("unsupported command: %q", cmd))
 
@@ -130,7 +132,7 @@ func readLines(file string) ([]string, error) {
 	return values, nil
 }
 
-func solve(year, day, part int) error {
+func solve(path string, year, day, part int) error {
 	if _, ok := allSolutions[year][day]; !ok {
 		err := create(year, day)
 		if err != nil {
@@ -138,16 +140,11 @@ func solve(year, day, part int) error {
 		}
 		return errors.New("Solution not implemented\nTemplate has been generated")
 	}
-	path := fmt.Sprintf("./data/%d/day%d", year, day)
 
-	lines := make([]string, 0)
-	var err error
+	lines, err := readLines(path)
 
-	for len(lines) == 0 {
-		lines, err = readLines(path)
-		if errors.Is(err, os.ErrNotExist) {
-			download(year, day)
-		}
+	if err != nil || len(lines) == 0 {
+		return fmt.Errorf("Missing input file: %s", path)
 	}
 
 	if part == 1 || part == 0 {
