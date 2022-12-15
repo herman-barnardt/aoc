@@ -46,14 +46,14 @@ func SetSolutionTemplate(s string) {
 	solutionTemplate = s
 }
 
-func Run(cmd string, year int, day int) error {
+func Run(cmd string, year int, day int, part int) error {
 	switch cmd {
 	case "create":
 		return create(year, day)
 	case "download":
 		return download(year, day)
 	case "solve":
-		return solve(year, day)
+		return solve(year, day, part)
 	default:
 		return errors.New(fmt.Sprintf("unsupported command: %q", cmd))
 
@@ -130,7 +130,7 @@ func readLines(file string) ([]string, error) {
 	return values, nil
 }
 
-func solve(year, day int) error {
+func solve(year, day, part int) error {
 	if _, ok := allSolutions[year][day]; !ok {
 		err := create(year, day)
 		if err != nil {
@@ -150,14 +150,18 @@ func solve(year, day int) error {
 		}
 	}
 
-	startTime := time.Now()
-	solution1 := allSolutions[year][day].Part1(lines)
-	duration1 := time.Since(startTime)
-	fmt.Printf("Part 1\n%v (%v)\n", solution1, duration1)
-	startTime = time.Now()
-	solution2 := allSolutions[year][day].Part2(lines)
-	duration2 := time.Since(startTime)
-	fmt.Printf("Part 2\n%v (%v)\n", solution2, duration2)
+	if part == 1 || part == 0 {
+		startTime := time.Now()
+		solution1 := allSolutions[year][day].Part1(lines)
+		duration1 := time.Since(startTime)
+		fmt.Printf("Part 1\n%v (%v)\n", solution1, duration1)
+	}
+	if part == 2 || part == 0 {
+		startTime := time.Now()
+		solution2 := allSolutions[year][day].Part2(lines)
+		duration2 := time.Since(startTime)
+		fmt.Printf("Part 2\n%v (%v)\n", solution2, duration2)
+	}
 	return nil
 }
 
