@@ -21,6 +21,8 @@ type solution struct {
 
 var allSolutions = make(map[int]map[int]solution)
 
+var filenameIncludesYear = false
+
 func Register(year int, dayNumber int, a, b func([]string) interface{}) {
 	if _, ok := allSolutions[year]; !ok {
 		allSolutions[year] = make(map[int]solution)
@@ -29,6 +31,10 @@ func Register(year int, dayNumber int, a, b func([]string) interface{}) {
 		Part1: a,
 		Part2: b,
 	}
+}
+
+func SetFilenameIncludesYear(b bool) {
+	filenameIncludesYear = b
 }
 
 func Run(cmd string, year int, day int) error {
@@ -160,7 +166,11 @@ func download(year, day int) error {
 }
 
 func create(year, day int) error {
-	filename := fmt.Sprintf("%dday%d", year, day)
+	filename := fmt.Sprintf("day%d", day)
+
+	if filenameIncludesYear {
+		filename = fmt.Sprintf("%dday%d", year, day)
+	}
 
 	basepath, err := os.Getwd()
 	if err != nil {
