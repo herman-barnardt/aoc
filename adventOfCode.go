@@ -234,8 +234,12 @@ func create(year, day int) error {
 		return err
 	}
 
-	makeDir(solutionDirectory)
-	makeDir(path.Join(solutionDirectory, fmt.Sprintf("day%d", day)))
+	if len(solutionDirectory) > 0 {
+		makeDir(solutionDirectory)
+		makeDir(path.Join(solutionDirectory, fmt.Sprintf("day%d", day)))
+	} else {
+		makeDir(fmt.Sprintf("day%d", day))
+	}
 
 	filePath := path.Join(basepath, solutionDirectory, fmt.Sprintf("day%d", day), filename)
 
