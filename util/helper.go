@@ -1,6 +1,9 @@
 package util
 
-import "math"
+import (
+	"fmt"
+	"math"
+)
 
 type Point struct {
 	X int
@@ -9,4 +12,8 @@ type Point struct {
 
 func IntAbs(a int) int {
 	return int(math.Abs(float64(a)))
+}
+
+func IsType(v any, expectedType string) bool {
+	return fmt.Sprintf("%T", v) == expectedType
 }
