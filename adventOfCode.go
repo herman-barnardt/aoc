@@ -229,20 +229,25 @@ func create(year, day int) error {
 		filename = fmt.Sprintf("%dday%d", year, day)
 	}
 
-	fmt.Println("Creating file from template: ", filename)
-
 	basepath, err := os.Getwd()
 	if err != nil {
 		return err
 	}
-	filePath := path.Join(basepath, solutionDirectory, filename)
 
-	_, err = os.Stat(filePath)
-	if !errors.Is(err, os.ErrNotExist) {
-		return fmt.Errorf("file=%s already exists (%v)", filename, err)
-	}
+	makeDir(solutionDirectory)
+	makeDir(path.Join(solutionDirectory, fmt.Sprintf("day%d", day)))
+
+	filePath := path.Join(basepath, solutionDirectory, fmt.Sprintf("day%d", day), filename)
 
 	filePath += fileExtension
+
+	_, err = os.Stat(filePath)
+	if err == nil {
+		fmt.Println("File already exists: ", filename)
+		return nil
+	}
+
+	fmt.Println("Creating file from template: ", filename)
 
 	templateString := solutionTemplate
 
@@ -263,7 +268,7 @@ func create(year, day int) error {
 	return os.WriteFile(filePath, []byte(templateString), 0644)
 }
 
-var solutionTemplate = `package main
+var solutionTemplate = `package day{{.Day}}
 import (
 	"errors"
 
