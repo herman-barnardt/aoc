@@ -10,6 +10,24 @@ type Point struct {
 	Y int
 }
 
+func PointsBetween(start *Point, end *Point) []*Point {
+	points := make([]*Point, 0)
+	if start.X == end.X {
+		yRange := IntAbs(start.Y - end.Y)
+		y := IntMin(start.Y, end.Y)
+		for i := y; i <= y+yRange; i++ {
+			points = append(points, &Point{X: start.X, Y: i})
+		}
+	} else if start.Y == end.Y {
+		xRange := IntAbs(start.X - end.X)
+		x := IntMin(start.X, end.X)
+		for i := x; i <= x+xRange; i++ {
+			points = append(points, &Point{X: i, Y: start.Y})
+		}
+	}
+	return points
+}
+
 func IntAbs(a int) int {
 	return int(math.Abs(float64(a)))
 }
