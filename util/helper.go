@@ -28,6 +28,10 @@ func PointsBetween(start *Point, end *Point) []*Point {
 	return points
 }
 
+func DistanceBetween(a *Point, b *Point) int {
+	return IntAbs(a.X-b.X) + IntAbs(a.Y-b.Y)
+}
+
 func IntAbs(a int) int {
 	return int(math.Abs(float64(a)))
 }
