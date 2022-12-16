@@ -15,11 +15,11 @@ func IntAbs(a int) int {
 }
 
 func IntMin(a, b int) int {
-	return int(math.Min(float64(a), float64(a)))
+	return int(math.Min(float64(a), float64(b)))
 }
 
 func IntMax(a, b int) int {
-	return int(math.Max(float64(a), float64(a)))
+	return int(math.Max(float64(a), float64(b)))
 }
 
 func IsType(v any, expectedType string) bool {
