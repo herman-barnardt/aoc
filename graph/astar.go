@@ -10,8 +10,8 @@ type aStarNode struct {
 	index  int
 }
 
-func (i aStarNode) Less(j QItem) bool {
-	return i.rank < j.(aStarNode).rank
+func (i *aStarNode) Less(j QItem) bool {
+	return i.rank < j.(*aStarNode).rank
 }
 
 type nodeMap map[Node]*aStarNode
