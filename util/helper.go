@@ -10,6 +10,10 @@ type Point struct {
 	Y int
 }
 
+func (p Point) Add(q Point) Point {
+	return Point{X: p.X + q.X, Y: p.Y + q.Y}
+}
+
 func PointsBetween(start *Point, end *Point) []*Point {
 	points := make([]*Point, 0)
 	if start.X == end.X {
