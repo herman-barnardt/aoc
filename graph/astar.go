@@ -44,7 +44,7 @@ func FindShortestPath(from, to Node) (path Path, distance float64, found bool) {
 		current.open = false
 		current.closed = true
 
-		if current == nodeMap.get(to) {
+		if current.node.Equal(to) {
 			// Found a path to the goal.
 			p := Path{}
 			curr := current
