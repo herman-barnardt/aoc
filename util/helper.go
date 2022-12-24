@@ -32,6 +32,15 @@ func PointsBetween(start *Point, end *Point) []*Point {
 	return points
 }
 
+func MinMax(points []Point) (Point, Point) {
+	min, max := Point{X: math.MaxInt, Y: math.MaxInt}, Point{X: math.MinInt, Y: math.MinInt}
+	for _, p := range points {
+		min.X, min.Y = IntMin(min.X, p.X), IntMin(min.Y, p.Y)
+		max.X, max.Y = IntMax(max.X, p.X), IntMax(max.Y, p.Y)
+	}
+	return min, max
+}
+
 func DistanceBetween(a *Point, b *Point) int {
 	return IntAbs(a.X-b.X) + IntAbs(a.Y-b.Y)
 }
