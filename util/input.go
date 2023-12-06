@@ -7,6 +7,7 @@ func SplitLines(lines []string, seperator string) [][]string {
 		if line == seperator {
 			retVal = append(retVal, temp)
 			temp = make([]string, 0)
+			continue
 		}
 		temp = append(temp, line)
 	}
