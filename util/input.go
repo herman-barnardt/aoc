@@ -10,5 +10,6 @@ func SplitLines(lines []string, seperator string) [][]string {
 		}
 		temp = append(temp, line)
 	}
+	retVal = append(retVal, temp)
 	return retVal
 }
