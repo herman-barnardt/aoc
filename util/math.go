@@ -1,7 +1,6 @@
 package util
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -17,6 +16,21 @@ func IntMax(a, b int) int {
 	return int(math.Max(float64(a), float64(b)))
 }
 
-func IsType(v any, expectedType string) bool {
-	return fmt.Sprintf("%T", v) == expectedType
+func GreatestCommonDivisor(a, b int) int {
+	for b != 0 {
+		t := b
+		b = a % b
+		a = t
+	}
+	return a
+}
+
+func LeastCommonMultiple(a, b int, integers ...int) int {
+	result := a * b / GreatestCommonDivisor(a, b)
+
+	for i := 0; i < len(integers); i++ {
+		result = LeastCommonMultiple(result, integers[i])
+	}
+
+	return result
 }
