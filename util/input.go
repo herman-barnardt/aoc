@@ -42,3 +42,14 @@ func LinesToIntMap(lines []string) map[int]map[int]int {
 	}
 	return retVal
 }
+
+func StringToIntSlice(line string, seperator string) []int {
+	retVal := make([]int, 0)
+	for _, c := range strings.Split(line, seperator) {
+		n, err := strconv.Atoi(c)
+		if err == nil {
+			retVal = append(retVal, n)
+		}
+	}
+	return retVal
+}
