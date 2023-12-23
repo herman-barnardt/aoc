@@ -13,6 +13,14 @@ func (p Point) Add(q Point) Point {
 	return Point{X: p.X + q.X, Y: p.Y + q.Y}
 }
 
+func (p Point) GetAdjacent() []Point {
+	adjacent := make([]Point, 0)
+	for _, direction := range []Point{{1, 0}, {-1, 0}, {0, 1}, {0, -1}} {
+		adjacent = append(adjacent, p.Add(direction))
+	}
+	return adjacent
+}
+
 func PointsBetween(start *Point, end *Point) []*Point {
 	points := make([]*Point, 0)
 	if start.X == end.X {
