@@ -41,6 +41,17 @@ func LinesToPointMap(lines []string) map[Point]string {
 	return retVal
 }
 
+func LinesToPointMapOfInts(lines []string) map[Point]int {
+	retVal := make(map[Point]int)
+	for y, line := range lines {
+		for x, c := range strings.Split(line, "") {
+			n, _ := strconv.Atoi(c)
+			retVal[Point{x, y}] = n
+		}
+	}
+	return retVal
+}
+
 func LinesToMapofInts(lines []string) map[int]map[int]int {
 	retVal := make(map[int]map[int]int)
 	for y, line := range lines {
