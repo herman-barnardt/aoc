@@ -9,13 +9,27 @@ type Point struct {
 	Y int
 }
 
+var Directions []Point = []Point{
+	{0, -1}, // up
+	{1, 0},  // right
+	{0, 1},  // down
+	{-1, 0}, // left
+}
+
+var (
+	UP    = Directions[0]
+	RIGHT = Directions[1]
+	DOWN  = Directions[2]
+	LEFT  = Directions[3]
+)
+
 func (p Point) Add(q Point) Point {
 	return Point{X: p.X + q.X, Y: p.Y + q.Y}
 }
 
 func (p Point) GetAdjacent() []Point {
 	adjacent := make([]Point, 0)
-	for _, direction := range []Point{{1, 0}, {-1, 0}, {0, 1}, {0, -1}} {
+	for _, direction := range Directions {
 		adjacent = append(adjacent, p.Add(direction))
 	}
 	return adjacent
