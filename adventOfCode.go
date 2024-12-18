@@ -5,7 +5,7 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"os"
@@ -15,8 +15,8 @@ import (
 )
 
 type solution struct {
-	Part1 func([]string) interface{}
-	Part2 func([]string) interface{}
+	Part1 func([]string, bool) interface{}
+	Part2 func([]string, bool) interface{}
 }
 
 var allSolutions = make(map[int]map[int]solution)
@@ -25,7 +25,7 @@ var filenameIncludesYear = false
 var fileExtension = ".go"
 var solutionDirectory = ""
 
-func Register(year int, dayNumber int, a, b func([]string) interface{}) {
+func Register(year int, dayNumber int, a, b func([]string, bool) interface{}) {
 	if _, ok := allSolutions[year]; !ok {
 		allSolutions[year] = make(map[int]solution)
 	}
@@ -77,11 +77,11 @@ func Run(cmd string, year int, day int, part int) error {
 		}
 
 	case "solve":
-		return solve(fmt.Sprintf("./data/%d/day%d", year, day), year, day, part)
+		return solve(fmt.Sprintf("./data/%d/day%d", year, day), year, day, part, false)
 	case "test":
-		return solve(fmt.Sprintf("./data/%d/day%dTest", year, day), year, day, part)
+		return solve(fmt.Sprintf("./data/%d/day%dTest", year, day), year, day, part, true)
 	default:
-		return errors.New(fmt.Sprintf("unsupported command: %q", cmd))
+		return fmt.Errorf("unsupported command: %q", cmd)
 
 	}
 }
@@ -105,7 +105,7 @@ func getFile(year, day int) error {
 	}
 
 	if len(cookie) == 0 {
-		return errors.New("Missing session file")
+		return errors.New("missing session file")
 	}
 
 	url := fmt.Sprintf("https://adventofcode.com/%d/day/%d/input", year, day)
@@ -125,7 +125,7 @@ func getFile(year, day int) error {
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return err
 	}
@@ -163,35 +163,35 @@ func readLines(file string) ([]string, error) {
 	return values, nil
 }
 
-func solve(path string, year, day, part int) error {
+func solve(path string, year, day, part int, test bool) error {
 	if _, ok := allSolutions[year][day]; !ok {
 		err := create(year, day)
 		if err != nil {
-			return fmt.Errorf("Solution not implemented\nTemplate generation has failed %v", err)
+			return fmt.Errorf("solution not implemented\ntemplate generation has failed %v", err)
 		}
-		return errors.New("Solution not implemented\nTemplate has been generated")
+		return errors.New("solution not implemented\ntemplate has been generated")
 	}
 
 	lines, err := readLines(path)
 
 	if err != nil {
-		return fmt.Errorf("Error reading file: %s %v", path, err)
+		return fmt.Errorf("error reading file: %s %v", path, err)
 	}
 	if len(lines) == 0 {
-		return fmt.Errorf("Input file %s is empty", path)
+		return fmt.Errorf("input file %s is empty", path)
 	}
 
 	fmt.Printf("Solving %d Day %d\n", year, day)
 
 	if part == 1 || part == 0 {
 		startTime := time.Now()
-		solution1 := allSolutions[year][day].Part1(lines)
+		solution1 := allSolutions[year][day].Part1(lines, test)
 		duration1 := time.Since(startTime)
 		fmt.Printf("Part 1: %v (%v)\n", solution1, duration1)
 	}
 	if part == 2 || part == 0 {
 		startTime := time.Now()
-		solution2 := allSolutions[year][day].Part2(lines)
+		solution2 := allSolutions[year][day].Part2(lines, test)
 		duration2 := time.Since(startTime)
 		fmt.Printf("Part 2: %v (%v)\n", solution2, duration2)
 	}
@@ -264,7 +264,7 @@ func create(year, day int) error {
 
 	buf := &bytes.Buffer{}
 	if err := t.Execute(buf, data); err != nil {
-		return fmt.Errorf("Failed to populate solution template %v", err)
+		return fmt.Errorf("failed to populate solution template %v", err)
 	}
 
 	templateString = buf.String()
@@ -278,15 +278,16 @@ import (
 
 	aoc "github.com/herman-barnardt/aoc"
 )
+
 func init() {
 	aoc.Register({{.Year}}, {{.Day}}, solve{{.Year}}Day{{.Day}}Part1, solve{{.Year}}Day{{.Day}}Part2)
 }
 
-func solve{{.Year}}Day{{.Day}}Part1(lines []string) interface{} {
+func solve{{.Year}}Day{{.Day}}Part1(lines []string, test bool) interface{} {
 	return errors.New("Not yet implemented")
 }
 
-func solve{{.Year}}Day{{.Day}}Part2(lines []string) interface{} {
+func solve{{.Year}}Day{{.Day}}Part2(lines []string, test bool) interface{} {
 	return errors.New("Not yet implemented")
 }
 `
