@@ -3,6 +3,8 @@ package util
 import (
 	"strconv"
 	"strings"
+
+	"github.com/herman-barnardt/aoc/graph"
 )
 
 func SplitLines(lines []string, seperator string) [][]string {
@@ -59,6 +61,40 @@ func LinesToMapofInts(lines []string) map[int]map[int]int {
 		for x, c := range strings.Split(line, "") {
 			n, _ := strconv.Atoi(c)
 			retVal[y][x] = n
+		}
+	}
+	return retVal
+}
+
+func LinesToPointMapOfBasicNodes(lines []string, neighourFilter func(*graph.BasicNode) bool) map[Point]*graph.BasicNode {
+	retVal := make(map[Point]*graph.BasicNode)
+	for y, line := range lines {
+		for x, c := range strings.Split(line, "") {
+			retVal[Point{x, y}] = &graph.BasicNode{X: x, Y: y, Value: c, PossibleNeighbours: make([]*graph.BasicNode, 0), NeighbourFilter: neighourFilter}
+		}
+	}
+	for point, node := range retVal {
+		for _, neighbour := range point.GetAdjacent() {
+			if _, ok := retVal[neighbour]; ok {
+				node.PossibleNeighbours = append(node.PossibleNeighbours, retVal[neighbour])
+			}
+		}
+	}
+	return retVal
+}
+
+func CreatePointMapOfBasicNodes(maxX, maxY int, value string, neighourFilter func(*graph.BasicNode) bool) map[Point]*graph.BasicNode {
+	retVal := make(map[Point]*graph.BasicNode)
+	for y := range maxY {
+		for x := range maxX {
+			retVal[Point{x, y}] = &graph.BasicNode{X: x, Y: y, Value: value, PossibleNeighbours: make([]*graph.BasicNode, 0), NeighbourFilter: neighourFilter}
+		}
+	}
+	for point, node := range retVal {
+		for _, neighbour := range point.GetAdjacent() {
+			if _, ok := retVal[neighbour]; ok {
+				node.PossibleNeighbours = append(node.PossibleNeighbours, retVal[neighbour])
+			}
 		}
 	}
 	return retVal
